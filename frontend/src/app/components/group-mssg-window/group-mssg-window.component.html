@@ -1,0 +1,81 @@
+<section *ngIf="selectedGroup">
+  <div class="chat-head">
+    <div class="row justify-content-between">
+      <div class="col-6">
+        <ul class="list-unstyled mb-0">
+          <li class="media">
+            <!-- <div *ngIf="selectedGroup.online" class="user-status"></div> -->
+            <img src="assets/images/logo.png" alt="">
+            <div class="media-body">
+              <h5>{{ selectedGroup.name }}</h5>
+              <p class="mb-0">{{ getMemberNames()}}, ...</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="col-6">
+        <ul class="list-inline float-end mb-0">
+          <li class="list-inline-item">
+            <button (click)="makeCall('audio')" type="button" class="">
+              <img src="assets/icons/phone.svg" alt="">
+            </button>
+          </li>
+
+          <li class="list-inline-item">
+            <button (click)="makeCall('video')" type="button" class="">
+              <img src="assets/icons/video.svg" alt="">
+            </button>
+          </li>
+
+          <li class="list-inline-item">
+            <button type="button" class="">
+              <img src="assets/icons/more-vertical.svg" alt="">
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-body" #chatBody>
+    <div *ngFor="let message of selectedGroup.messages" class="chat-message"
+      [ngClass]="{'left': message.sender__email != currentUser, 'right': message.sender__email == currentUser}">
+      <h4 class="" style="margin-bottom: -2px;">{{message.sender__email}}</h4>
+      <div class="text">
+        <span>{{ message.text}}</span>
+      </div>
+      <div class="meta">
+        <span>{{ dateHumanize(message.date_time) }}</span>
+        <i class="feather icon-check ml-2"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-bottom">
+    <!-- <div class="typing-status" *ngIf="selectedGroup" class="typing-status">Typing...</div> -->
+    <div class="chat-messagebar">
+      <form (ngSubmit)="sendMessage()">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <a href="#" id="button-addonmic"><i class="feather icon-mic"></i></a>
+          </div>
+          <input [(ngModel)]="message" name="message" type="text" class="form-control" placeholder="Type a message..."
+            aria-label="Text">
+          <div class="input-group-append">
+            <a href="#" class="mr-3" id="button-addonlink"><i class="feather icon-paperclip"></i></a>
+            <a href="#" id="button-addonsend" (click)="sendMessage()"><i class="feather icon-send"></i></a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section *ngIf="!selectedGroup">
+  <div class="d-flex justify-content-center align-items-center" style="height: 100vh">
+    <div class="align-middle">
+      <h1 class="text text-black-50">Welcome to Django Group Chat</h1>
+      <p class="text-black-50">Click on the list of left sidebar to select group to start chatting</p>
+    </div>
+  </div>
+</section>

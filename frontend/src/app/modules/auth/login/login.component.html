@@ -1,0 +1,30 @@
+<form (ngSubmit)="login()" novalidate>
+    <div class="form-head">
+      <a routerLink="/" class="logo"><img src="assets/images/logo.png" class="img-fluid" alt="logo"></a>
+    </div>
+    <h4 class="text-primary my-4">Log in !</h4>
+  
+    <div class="form-floating mb-3">
+      <input [(ngModel)]="user.email" name="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+      <label for="floatingInput">Email</label>
+    </div>
+    <div class="form-floating">
+      <input [(ngModel)]="user.password" name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
+      <label for="floatingPassword">Password</label>
+    </div>
+  
+    <div class="row justify-content-end">
+      <div class="col-md-6">
+        <a routerLink="/forget-password" class="float-end mb-3">Forgot Password ?</a>
+      </div>
+    </div>
+  
+    <div class="d-grid gap-2">
+      <button class="btn btn-success btn-lg btn-block font-18" type="submit">Log in</button>
+    </div>
+  </form>
+  
+  <p class="mb-0 mt-3">Don't have an account?
+    <a routerLink="/registration">Create an account</a>
+  </p>
+  

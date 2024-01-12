@@ -1,0 +1,28 @@
+<!-- left-header.component.html -->
+
+<div class="chat-left-headbar">
+  <div class="row align-items-center">
+    <div class="col-6">
+      <ul class="list-unstyled mb-0">
+        <li class="media">
+          <img class="align-self-center mr-2" src="assets/logo.png" alt="Generic placeholder image">
+          <div class="media-body">
+            <h5 class="mb-0 mt-2">{{ activeUserName }}</h5>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="col-3">
+      <a (click)="addGroup()" data-toggle="tooltip" data-placement="right" title=""
+        data-original-title="Add-group">
+        <mat-icon>add</mat-icon>
+      </a>
+    </div>
+    <div class="col-3">
+      <a (click)="logout()" href="/logout" data-toggle="tooltip" data-placement="right" title=""
+        data-original-title="Logout">
+        <img src="assets/icons/log-out.svg" alt="">
+      </a>
+    </div>
+  </div>
+</div>

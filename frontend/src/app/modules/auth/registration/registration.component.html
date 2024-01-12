@@ -1,0 +1,40 @@
+<form (ngSubmit)="register()" novalidate>
+    <div class="form-head">
+      <a routerLink="/" class="logo"><img src="assets/images/logo.png" class="img-fluid" alt="logo"></a>
+    </div>
+    <h4 class="text-primary my-4">Create an Account</h4>
+  
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" [(ngModel)]="user.first_name" name="first_name" placeholder="First Name">
+      <label>First Name</label>
+    </div>
+  
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" [(ngModel)]="user.last_name" name="last_name" placeholder="Last Name">
+      <label>Last Name</label>
+    </div>
+
+    <div class="form-floating mb-3">
+        <input type="text" class="form-control" [(ngModel)]="user.email" name="email" placeholder="name@example.com">
+        <label>Email</label>
+      </div>
+  
+    <div class="form-floating mb-3">
+      <input type="password" autocomplete="false" class="form-control" [(ngModel)]="user.password" name="password" placeholder="Password">
+      <label>Password</label>
+    </div>
+
+    <div class="form-floating mb-3">
+        <input type="password" autocomplete="false" class="form-control" [(ngModel)]="user.confirm_pass" name="confirm_pass" placeholder="Confirm Password">
+        <label>Confirm Password</label>
+    </div>
+  
+    <div class="d-grid gap-2">
+      <button class="btn btn-success btn-lg btn-block font-18" type="submit">Sign up</button>
+    </div>
+  </form>
+  
+  <p class="mb-0 mt-3">Already have an account?
+    <a routerLink="/">Log in</a>
+  </p>
+  

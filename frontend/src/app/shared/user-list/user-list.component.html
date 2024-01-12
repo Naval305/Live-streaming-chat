@@ -1,0 +1,22 @@
+<div class="chat-left-body">
+  <div class="nav flex-column nav-pills chat-userlist" id="chat-list-tab" role="tablist" aria-orientation="vertical">
+    <a *ngFor="let user of users" class="nav-link" [class.active]="selected_user === user" id="chat-first-tab"
+      (click)="setSelectedUser(user)">
+      <div class="media active">
+        <div *ngIf="user.online" class="user-status"></div>
+        <img class="align-self-center rounded-circle"
+          src={{user.photo}} alt="User Image">
+        <div class="media-body">
+          <h5>{{ user.first_name }} {{ user.last_name }} <span *ngIf="getUnreadMessage(user)"
+              class="badge badge-primary ml-2">{{
+              getUnreadMessage(user) }}</span>
+            <span class="chat-timing">{{
+              dateHumanize(user.messages[user.messages.length - 1]?.date_time) }}</span>
+          </h5>
+          <p *ngIf="!user.messages.length">{{ user.status }}</p>
+          <p *ngIf="user.messages.length">{{ summarizeMessage(user.messages.slice(-1)[0].text) }}</p>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>

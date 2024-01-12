@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>CHAT</title>
+</head>
+
+<body>
+    <h3 id="label-username">USERNAME</h3>
+    <div>
+        <input id="username">
+        <button id="btn-join">
+            JOIN ROOM
+        </button>
+    </div>
+    <div class="main-grid-container">
+        <div d="video-container">
+            <div>
+                <video id="local-video" autoplay playsinline>
+                </video>
+            </div>
+            <button id="btn-toggle-audo">AUIDO MUTE</button>
+            <button id="btn-toggle-video">VIDEO MUTE</button>
+        </div>
+        <div id="chat">
+            <h3>CHAT</h3>
+            <div id="messages">
+                <ul id="message-list"></ul>
+            </div>
+            <div><input id="msg">
+                <button id="id-send-msg"></button>
+            </div>
+            <button id="btn-share-screen">SHARE SCREEN</button>
+        </div>
+    </div>
+</body>
+
+</html>

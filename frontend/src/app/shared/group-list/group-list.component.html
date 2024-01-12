@@ -1,0 +1,21 @@
+<div class="chat-left-body">
+    <div class="nav flex-column nav-pills chat-userlist" id="chat-list-tab" role="tablist" aria-orientation="vertical">
+      <a *ngFor="let group of groups" class="nav-link"
+      (click)="setSelectedGroup(group)"
+        id="chat-first-tab"
+        >
+        <div class="media active">
+          
+          <img class="align-self-center rounded-circle"
+            src="assets/images/logo.png" alt="User Image">
+          <div class="media-body">
+            <h5>{{ group.name }} <span 
+                class="badge badge-primary ml-2"></span>
+              <span class="chat-timing"></span>
+            </h5>
+        
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>

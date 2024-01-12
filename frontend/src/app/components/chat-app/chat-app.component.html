@@ -1,0 +1,51 @@
+<section class="chat-layout">
+
+  <div class="chat-leftbar">
+    <app-header></app-header>
+
+    <app-search></app-search>
+
+    <app-user-list *ngIf="!selectGroup"></app-user-list>
+    <group-user-list *ngIf="selectGroup"></group-user-list>
+
+    <div class="chat-menu">
+      <ul class="nav nav-pills nav-justified mb-0" id="pills-tab-justified" role="tablist">
+        <li class="nav-item">
+          <button [class.active]="!selectGroup" [class.inactive-link]="selectGroup" class="nav-link"
+            id="pills-chat-tab-justified" data-toggle="pill" role="tab" aria-controls="pills-chat-justified"
+            aria-selected="true" (click)="selectChat()">
+            <img src="assets/icons/message-circle.svg" alt="">
+          </button>
+        </li>
+        <!-- <li class="nav-item">
+          <button class="nav-link" id="pills-addchat-tab-justified" data-toggle="pill" role="tab"
+            aria-controls="pills-addchat-justified" aria-selected="false">
+            <img src="assets/icons/edit-3.svg" alt="">
+          </button>
+        </li> -->
+        <li class="nav-item">
+          <button [class.active]="selectGroup" [class.inactive-link]="!selectGroup" class="nav-link"
+            id="pills-profile-tab-justified" data-toggle="pill" role="tab" aria-controls="pills-profile-justified"
+            aria-selected="false" (click)="selectgroup()">
+            <img src="assets/icons/user.svg" alt="">
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" id="pills-setting-tab-justified" data-toggle="pill" href="#pills-setting-justified"
+            role="tab" aria-controls="pills-setting-justified" aria-selected="false">
+            <img src="assets/icons/settings.svg" alt="">
+          </button>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="chat-rightbar show">
+    <div class="chat-details">
+      <app-message-window #messageWindow [selected_user]="selected_user" *ngIf="!selectGroup"></app-message-window>
+      <app-group-mssg-window #messageGroupWindow *ngIf="selectGroup"></app-group-mssg-window>
+    </div>
+  </div>
+
+</section>
