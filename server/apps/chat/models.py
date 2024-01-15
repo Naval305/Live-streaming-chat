@@ -32,15 +32,3 @@ class Message(models.Model):
 
     class Meta:
         ordering = ["-date_time"]
-
-
-# @receiver(post_save, sender=Message)
-# def trigger_broadcast(instance, **kwargs):
-#     from apps.chat.broadcasters import MessageBroadcaster
-
-#     @transaction.on_commit
-#     def on_commit_callback():
-#         message_broadcaster = MessageBroadcaster(instance)
-#         message_broadcaster.broadcast()
-
-#     on_commit_callback()

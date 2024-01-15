@@ -29,7 +29,7 @@ export class UserListComponent implements OnInit {
   }
 
   getUnreadMessage(user: any) {
-    return user.messages.filter((value: { read: any }) => !value.read).length;
+    return user.messages.filter((value: { read: any }) => value.read == false).length;
   }
   dateHumanize(datetime: any) {
     return moment(datetime).fromNow();

@@ -11,6 +11,7 @@ class MessageAdmin(admin.ModelAdmin):
         "date_time",
         "sender",
         "receiver",
+        "receiver_group"
     )
 
 

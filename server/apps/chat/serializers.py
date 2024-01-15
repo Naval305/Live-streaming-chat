@@ -6,6 +6,7 @@ from django.db.models import Q
 
 class MessageModelSerializer(serializers.ModelSerializer):
     sender = serializers.CharField(read_only=True)
+    receiver = serializers.EmailField(read_only=True)
     read = serializers.BooleanField(default=True)
 
     class Meta:
@@ -65,34 +66,33 @@ class CustomMessagesPagination(PageNumberPagination):
 
 
 class MessageViewSerializer(serializers.ModelSerializer):
-    messages = serializers.SerializerMethodField()
-
+    sender = serializers.CharField(read_only=True)
+    receiver = serializers.CharField(read_only=True)
     class Meta:
-        model = User
+        model = Message
         fields = (
-            "first_name",
-            "last_name",
-            "email",
-            "online",
-            "status",
-            "photo",
-            "messages",
+            "text",
+            "sender",
+            "receiver",
+            "date_time",
         )
 
-    def get_messages(self, obj):
-        messages = (
-            Message.objects.filter(
-                Q(receiver=obj, sender=self.context["request"].user.id)
-                | Q(sender=obj, receiver=self.context["request"].user.id)
-            )
-            .prefetch_related("sender", "receiver")
-            .order_by("date_time")
-        )
 
-        paginator = CustomMessagesPagination()
-        paginated_messages = paginator.paginate_queryset(
-            messages, self.context["request"]
-        )
 
-        serializer = MessageModelSerializer(messages, many=True)
-        return serializer.data
+    # def get_messages(self, obj):
+    #     messages = (
+    #         Message.objects.filter(
+    #             Q(receiver=obj, sender=self.context["request"].user.id)
+    #             | Q(sender=obj, receiver=self.context["request"].user.id)
+    #         )
+    #         .prefetch_related("sender", "receiver")
+    #         .order_by("date_time")
+    #     )
+
+    #     paginator = CustomMessagesPagination()
+    #     paginated_messages = paginator.paginate_queryset(
+    #         messages, self.context["request"]
+    #     )
+
+    #     serializer = MessageModelSerializer(messages, many=True)
+    #     return serializer.data

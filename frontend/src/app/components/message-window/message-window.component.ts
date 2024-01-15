@@ -2,17 +2,14 @@ import {
   AfterViewChecked,
   Component,
   ElementRef,
-  HostListener,
   Input,
   OnInit,
   ViewChild,
 } from '@angular/core';
 import * as moment from 'moment';
-import { MatDialog } from '@angular/material/dialog';
 import { MessageService } from 'src/app/services/message.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
-import { SenderComponent } from 'src/app/modules/call-app/sender/sender.component';
-import { Route, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-message-window',
@@ -23,17 +20,19 @@ export class MessageWindowComponent implements OnInit, AfterViewChecked {
   @Input() selected_user!: any;
   @ViewChild('chatBody') chatBody!: ElementRef;
 
+  private apiUrl = 'http://localhost:8000';
   users: any[] = [];
   message: string = '';
   typing: boolean = false;
   selectedGroup: any = null;
   preventSrollDown: boolean = false;
-  currentPage = 1;
+  getMssg: boolean = true;
+  nextPag: any;
+  totalMsg: number = 0;
 
   constructor(
     private userStoreService: UserStoreService,
     private messageService: MessageService,
-    private dialog: MatDialog,
     private router: Router
   ) {}
 
@@ -44,7 +43,8 @@ export class MessageWindowComponent implements OnInit, AfterViewChecked {
 
     this.userStoreService.selectedUser$.subscribe((selectedUser: any) => {
       this.selected_user = selectedUser;
-      if (this.selected_user) {
+      if (this.selected_user && this.getMssg) {
+        this.nextPag = `${this.apiUrl}/api/chat/messages?receiver=${this.selected_user.email}&limit=20&offset=0`;
         this.getMessages();
       }
     });
@@ -66,17 +66,14 @@ export class MessageWindowComponent implements OnInit, AfterViewChecked {
   }
 
   getMessages() {
-    this.messageService.getMessages(this.currentPage, this.selected_user.email).subscribe(
+    this.messageService.getMessages(this.nextPag).subscribe(
       (response: any) => {
-        // response.forEach((element: any) => {
-        //   element.messages.forEach((msg: any) =>{
-        //     this.selected_user.messages.push(msg)
-        //   })
-        // })
-      //  this.userStoreService.users = response;
-        // response[0].messages.forEach((element: any) => {
-        //   this.selected_user.messages.push(element);
-        // });
+        this.totalMsg = response['count'];
+        this.nextPag = response['next'];
+        response['results'].forEach((element: any) => {
+          this.selected_user.messages.unshift(element);
+        });
+        this.getMssg = false;
       },
       (error) => {
         console.error('Error fetching messages:', error);
@@ -85,22 +82,6 @@ export class MessageWindowComponent implements OnInit, AfterViewChecked {
   }
 
   makeCall(audio: any) {
-    // const dialogRef = this.dialog.open(SenderComponent, {
-    //   data: {
-    //     email: this.selected_user.email,
-    //     photo: this.selected_user.photo,
-    //     name: this.selected_user.first_name,
-    //     online: this.selected_user.online,
-    //   },
-    //   width: '650px',
-    //   height: '650px',
-    //   disableClose: true,
-    // });
-
-    // dialogRef.afterClosed().subscribe((result) => {
-    //   // Handle any result if needed
-    // });
-
     const queryParams = {
       display: JSON.stringify({
         email: this.selected_user.email,
@@ -176,7 +157,6 @@ export class MessageWindowComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  //@HostListener('scroll', ['$event'])
   onScroll(event: Event): void {
     this.preventSrollDown = true;
     const element = event.target as HTMLElement;
@@ -190,8 +170,8 @@ export class MessageWindowComponent implements OnInit, AfterViewChecked {
   }
 
   handleScroll(): void {
-    if (this.selected_user) {
-      this.currentPage++;
+    if (this.selected_user && this.nextPag != null) {
+      this.getMssg = true;
       this.getMessages();
     }
   }

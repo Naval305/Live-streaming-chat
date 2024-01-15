@@ -1,3 +1,4 @@
+import json
 from django.http import HttpResponseServerError
 from rest_framework.generics import ListAPIView, CreateAPIView
 
@@ -13,31 +14,32 @@ from apps.chat.models import ChatGroup
 from rest_framework import status
 from rest_framework.response import Response
 
-
-# class MessageViewApi(CreateAPIView):
-#     serializer_class = MessageSerializer
-
-#     def perform_create(self, serializer):
-#         try:
-#             receiver_email = serializer.validated_data.get("receiver", None)
-#             sender = self.request.user
-#             receiver = get_object_or_404(User, email=receiver_email)
-
-#             serializer.save(sender=sender, receiver=receiver)
-#         except Exception as e:
-#             return HttpResponseServerError(f"Error in creating message: {e}")
+from apps.chat.models import Message
+from django.db.models import Q
 
 
 class GetMessages(ListAPIView):
     serializer_class = MessageViewSerializer
 
     def get_queryset(self):
-        return User.objects.filter(
-            email__in=[
-                self.request.query_params["user"],
-                self.request.query_params["logged_user"],
-            ]
+        messages = (
+            Message.objects.filter(receiver_group=None)
+            .filter(
+                Q(
+                    receiver__email=self.request.query_params["receiver"],
+                    sender=self.request.user.id,
+                )
+                | Q(
+                    sender__email=self.request.query_params["receiver"],
+                    receiver=self.request.user.id,
+                )
+            )
+            .prefetch_related("sender", "receiver")
+            .order_by("-date_time")
         )
+
+        messages = messages.exclude(id=messages.first().id)
+        return messages
 
 
 class GetGroupViewApi(ListAPIView):

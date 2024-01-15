@@ -7,16 +7,16 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import Peer from 'peerjs';
 import { MessageService } from 'src/app/services/message.service';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-receiver',
-  templateUrl: './receiver.component.html',
-  styleUrls: ['./receiver.component.scss'],
+  selector: 'app-receiver-group',
+  templateUrl: './receiver-group.component.html',
+  styleUrls: ['./receiver-group.component.scss'],
 })
-export class ReceiverComponent implements OnInit, OnDestroy {
+export class ReceiverGroupComponent implements OnInit, OnDestroy {
   @ViewChild('local_video', { static: true }) localVideo!: ElementRef;
   @ViewChild('remote_video', { static: true }) remoteVideo!: ElementRef;
   @Output() clickCallback: EventEmitter<void> = new EventEmitter<void>();
@@ -42,6 +42,7 @@ export class ReceiverComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.userData = JSON.parse(this.route.snapshot['queryParams']['display']);
+    console.log(this.userData)
     this.initializePeer();
   }
 

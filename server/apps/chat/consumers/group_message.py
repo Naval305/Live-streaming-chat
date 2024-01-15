@@ -3,6 +3,10 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 
+from apps.call.serializers import GroupCallSerializer
+from apps.user.serializers import UserSerializer
+from apps.user.models import User
+
 
 class GroupChat(AsyncWebsocketConsumer):
     async def connect(self):
@@ -13,16 +17,38 @@ class GroupChat(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         data = json.loads(text_data)
-        await self.channel_layer.group_send(
-            "chat_" + str(data["sender_group"]),
-            {"type": "new_message", "message": data},
-        )
-        await self.__save_message(data)
+        if "call" in data:
+            chat_room_name = "chat_" + self.group_id
+            serializer = GroupCallSerializer(data=data)
+            if serializer.is_valid():
+                sender_user = await self.__get_user_by_email(data["sender"])
+                await self.channel_layer.group_send(
+                    chat_room_name,
+                    {
+                        "type": "new_call",
+                        "message": {
+                            "data": data,
+                            "display": UserSerializer(sender_user).data,
+                        },
+                    },
+                )
+        else:
+            await self.channel_layer.group_send(
+                "chat_" + str(data["sender_group"]),
+                {"type": "new_message", "message": data},
+            )
+            await self.__save_message(data)
 
     async def new_message(self, event):
         message = event["message"]
         await self.send(
             text_data=json.dumps({"message": message, "status": "new_message"})
+        )
+
+    async def new_call(self, event):
+        message = event["message"]
+        await self.send(
+            text_data=json.dumps({"message": message, "status": "new_call"})
         )
 
     async def disconnect(self, code):
@@ -42,3 +68,7 @@ class GroupChat(AsyncWebsocketConsumer):
         Message.objects.create(
             sender=sender, text=message["text"], receiver_group=receiver_group
         )
+
+    @database_sync_to_async
+    def __get_user_by_email(self, email):
+        return User.objects.get(email=email)

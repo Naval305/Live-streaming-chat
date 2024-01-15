@@ -64,7 +64,9 @@ export class ChatAppComponent implements OnInit {
           if (eventJSON.status === 'new_call') {
             this.openCallViewWindow(eventJSON.message);
           } else if (eventJSON.status == 'typing') {
-            this.selected_user.isTyping = eventJSON.typing;
+            if (this.selected_user.email == eventJSON.sender) {
+              this.selected_user.isTyping = eventJSON.typing;
+            }
           } else {
             const message = JSON.parse(event.data).message;
             this.selected_user.isTyping = false;
@@ -87,21 +89,6 @@ export class ChatAppComponent implements OnInit {
   }
 
   openCallViewWindow(data: any): void {
-    // const dialogRef = this.dialog.open(ReceiverComponent, {
-    //   data: {
-    //     email: data["display"].email,
-    //     photo: this.selected_user.photo,
-    //     name: data["display"].first_name+ data["display"].last_name,
-    //     online: data["display"].online,
-    //     peer_id: data["data"]["peer_id"]
-    //   },
-    //   width: '650px',
-    //   height: '650px',
-    //   disableClose: true,
-    // });
-
-    // dialogRef.afterClosed().subscribe((result: any) => {});
-
     const queryParams = {
       display: JSON.stringify({
         email: data['display'].email,

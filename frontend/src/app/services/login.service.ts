@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
@@ -9,14 +9,8 @@ export class LoginService {
 
   constructor(private http: HttpClient) {}
 
-  public getHeaders() :any {
-    const headers = new HttpHeaders();
+  public getHeaders(): any {
     const token = localStorage.getItem('token');
-
-    // if (token) {
-    //   headers.set('Authorization', `Bearer ${token}`);
-    // }
-    // return headers;
 
     if (token) {
       return { Authorization: `Bearer ${token}` };
@@ -24,18 +18,14 @@ export class LoginService {
     return {};
   }
 
-  // public get<T>(url: string): Observable<T> {
-  //   return this.http.get<T>(`${this.apiUrl}/${url}`, {
-  //     headers: this.getHeaders(),
-  //   });
-  // }
-
-  // public post<T>(url: string, data: any): Observable<T> {
-  //   return this.http.post<T>(`${this.apiUrl}/${url}`, data, {
-  //     headers: this.getHeaders(),
-  //   });
-  // }
   public login(user: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/api/user/login`, user, {headers: this.getHeaders()});
+    return this.http.post(`${this.apiUrl}/api/user/login`, user, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  isAuthenticated(): boolean {
+    const token = localStorage.getItem('token');
+    return !!token;
   }
 }

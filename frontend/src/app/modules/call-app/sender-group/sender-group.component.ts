@@ -1,14 +1,15 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import Peer from 'peerjs';
-import { MessageService } from 'src/app/services/message.service';
 import { ActivatedRoute } from '@angular/router';
+import Peer from 'peerjs';
+import { timeout } from 'rxjs';
+import { MessageService } from 'src/app/services/message.service';
 
 @Component({
-  selector: 'app-sender',
-  templateUrl: './sender.component.html',
-  styleUrls: ['./sender.component.scss'],
+  selector: 'app-sender-group',
+  templateUrl: './sender-group.component.html',
+  styleUrls: ['./sender-group.component.scss'],
 })
-export class SenderComponent implements OnInit {
+export class SenderGroupComponent implements OnInit {
   @ViewChild('local_video', { static: true }) localVideo!: ElementRef;
   @ViewChild('remote_video', { static: true }) remoteVideo!: ElementRef;
 
@@ -101,16 +102,16 @@ export class SenderComponent implements OnInit {
 
   startCall() {
     const data = {
-      receiver: this.userData.email,
+      sender_group: this.userData.id,
       sender: localStorage.getItem('user'),
       peer_id: this.peer_id,
+      call: true,
+      sender_name: this.userData.name,
     };
-    console.log(this.userData);
-    this.socket.send(
-      JSON.stringify({
-        data,
-      })
-    );
+
+    setTimeout(() => {
+      this.socket[this.userData.id].send(JSON.stringify(data));
+    }, 1000);
   }
 
   toggleLocalVideo() {
@@ -151,8 +152,12 @@ export class SenderComponent implements OnInit {
   }
 
   connectWebSocket() {
-    this.socket = this.messageService.messageSocket;
-    this.socket.onmessage = (event: { data: string }) => {
+    this.userData.sockets.map((id: any) => {
+      this.messageService.connectGroupChatSocket(parseInt(id));
+    });
+    this.socket = this.messageService.groupChatSocket;
+    console.log(this.socket);
+    this.socket[this.userData.id].onmessage = (event: { data: string }) => {
       const message = JSON.parse(event.data);
       switch (message.status) {
         case 'end_call':

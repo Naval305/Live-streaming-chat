@@ -2,15 +2,13 @@ import {
   AfterViewChecked,
   Component,
   ElementRef,
-  Input,
   OnInit,
   ViewChild,
 } from '@angular/core';
+import { Router } from '@angular/router';
 import * as moment from 'moment';
-import { MatDialog } from '@angular/material/dialog';
 import { MessageService } from 'src/app/services/message.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
-import { SenderComponent } from 'src/app/modules/call-app/sender/sender.component';
 
 @Component({
   selector: 'app-group-mssg-window',
@@ -31,37 +29,60 @@ export class GroupMssgWindowComponent implements OnInit, AfterViewChecked {
   constructor(
     private userStoreService: UserStoreService,
     private messageService: MessageService,
-    private dialog: MatDialog
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    // this.userStoreService.users$.subscribe((users: any[]) => {
-    //   this.users = users;
-    // });
-
-    // this.userStoreService.selectedUser$.subscribe((selectedUser: any) => {
-    //   this.selected_user = selectedUser;
-    // });
-
-
     this.userStoreService.selectedGroup$.subscribe((selectedGroup: any) => {
       this.selectedGroup = selectedGroup;
       this.groups = this.userStoreService.groups;
       if (this.selectedGroup) {
         this.groupChatSocket = this.messageService.groupChatSocket;
 
-        this.groupChatSocket[this.selectedGroup.id].onmessage = (event: any) => {
+        this.groupChatSocket[this.selectedGroup.id].onmessage = (
+          event: any
+        ) => {
           const eventJSON = JSON.parse(event.data);
-          const message = JSON.parse(event.data).message;
-          const groups = this.groups.find(
-            (value: { id: any }) => value.id == message.sender_group
-          );
+          if (eventJSON.status === 'new_call') {
+            if (
+              eventJSON.message['data'].sender != localStorage.getItem('user')
+            ) {
+              this.openCallViewWindow(eventJSON.message);
+            }
+          } else {
+            const message = eventJSON.message;
+            const groups = this.groups.find(
+              (value: { id: any }) => value.id == message.sender_group
+            );
 
-          groups.messages.push(message);
-          //this.selectedGroup.messages.push(message);
+            groups.messages.push(message);
+          }
         };
       }
     });
+  }
+
+  openCallViewWindow(data: any): void {
+    const queryParams = {
+      display: JSON.stringify({
+        id: data['data'].group_id,
+        name: data['data'].sender_name,
+        sender: data['data'].sender,
+        photo: 'assets/images/logo.png',
+        peer_id: data['data']['peer_id'],
+      }),
+    };
+
+    const urlTree = this.router.createUrlTree(['receiver-group'], {
+      queryParams,
+    });
+
+    const url = this.router.serializeUrl(urlTree);
+    window.open(
+      url,
+      '_blank',
+      'popup,height=650,width=550,resizable=0,location=no,toolbar=no,menubar=no,resizable=no'
+    );
   }
 
   ngAfterViewChecked() {
@@ -78,31 +99,30 @@ export class GroupMssgWindowComponent implements OnInit, AfterViewChecked {
   }
 
   makeCall(audio: any) {
-    const dialogRef = this.dialog.open(SenderComponent, {
-      data: {
-        email: this.selected_user.email,
-        photo: this.selected_user.photo,
-        name: this.selected_user.first_name,
-        online: this.selected_user.online,
-      },
-      width: '550px',
-      height: '650px',
-      disableClose: true,
+    const queryParams = {
+      display: JSON.stringify({
+        id: this.selectedGroup.id,
+        name: this.selectedGroup.name,
+        sender: this.currentUser,
+        photo: 'assets/images/logo.png',
+        sockets: Object.keys(this.groupChatSocket),
+      }),
+    };
+
+    const urlTree = this.router.createUrlTree(['sender-group'], {
+      queryParams,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      // Handle any result if needed
-    });
+    const url = this.router.serializeUrl(urlTree);
+    window.open(
+      url,
+      '_blank',
+      'popup,height=650,width=550,resizable=0,location=no,toolbar=no,menubar=no,resizable=no'
+    );
   }
 
   sendMessage() {
     if (this.message) {
-      // this.selectedGroup.messages.push({
-      //   text: this.message,
-      //   date_time: new Date(),
-      //   sender__email: localStorage.getItem('user'),
-      // });
-
       this.groupChatSocket[this.selectedGroup.id].send(
         JSON.stringify({
           sender__email: localStorage.getItem('user'),

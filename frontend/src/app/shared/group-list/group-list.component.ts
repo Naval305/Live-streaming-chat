@@ -17,23 +17,16 @@ export class GroupListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.userStoreService.getGroups().subscribe((response) => {
-      this.groups = response;
+    this.userStoreService.getGroups().subscribe((response: any) => {
+      this.groups = response['results'];
       this.userStoreService.groups = this.groups;
       this.groups.map((obj: any) => {
-          this.messageService.connectGroupChatSocket(obj.id);
+        this.messageService.connectGroupChatSocket(obj.id);
       });
     });
-    // this.userStoreService.users$.subscribe((users) => {
-    //   this.users = users;
-    // });
-    // this.userStoreService.selectedUser$.subscribe((selectedUser) => {
-    //   this.selected_user = selectedUser;
-    // });
   }
 
   setSelectedGroup(group: any) {
-    // user.messages.forEach((value: { read: boolean; }) => (value.read = true));
     this.userStoreService.selectedGroup = group;
   }
 

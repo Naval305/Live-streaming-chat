@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('token', response.access);
         localStorage.setItem("user", response.user_details);
         this.toastr.success('Sucess');
-        this.router.navigate(['/chat']);
+        this.router.navigate(['']);
       },
       (error) => {
         console.error(error);

@@ -89,7 +89,7 @@ class UserViewSerializer(serializers.ModelSerializer):
 
     def get_messages(self, obj):
         messages = (
-            Message.objects.filter(
+            Message.objects.filter(receiver_group=None).filter(
                 Q(receiver=obj, sender=self.context["request"].user.id)
                 | Q(sender=obj, receiver=self.context["request"].user.id)
             )
@@ -97,5 +97,5 @@ class UserViewSerializer(serializers.ModelSerializer):
             .order_by("date_time")
         )
 
-        serializer = MessageModelSerializer(messages, many=True)
-        return serializer.data
+        serializer = MessageModelSerializer(messages.last(), many=False)
+        return [serializer.data]

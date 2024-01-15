@@ -58,8 +58,8 @@ export class UserStoreService {
 
   fetchUsers() {
     this.getUsers().subscribe(
-      (res) => {
-        this.usersSubject.next(res);
+      (res: any) => {
+        this.usersSubject.next(res['results']);
       },
       (error) => {
         console.error('Error fetching users:', error);

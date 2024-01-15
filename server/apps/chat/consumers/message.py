@@ -2,7 +2,6 @@ import json
 
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
-from asgiref.sync import async_to_sync
 
 from apps.user.models import User
 from apps.call.serializers import StartCallSerializer
@@ -70,6 +69,7 @@ class MessageConsumer(AsyncWebsocketConsumer):
                     "type": "typing",
                     "receiver": data["receiver"],
                     "is_typing": data["typing"],
+                    "sender": data["sender"],
                 },
             )
         else:
@@ -77,7 +77,11 @@ class MessageConsumer(AsyncWebsocketConsumer):
 
     async def typing(self, event):
         is_typing = event["is_typing"]
-        await self.send(text_data=json.dumps({"typing": is_typing, "status": "typing"}))
+        await self.send(
+            text_data=json.dumps(
+                {"typing": is_typing, "status": "typing", "sender": event["sender"]}
+            )
+        )
 
     async def new_message(self, event):
         message = event["message"]
@@ -109,10 +113,6 @@ class MessageConsumer(AsyncWebsocketConsumer):
         sender = User.objects.get(email=message["sender"])
         receiver = User.objects.get(email=message["receiver"])
         Message.objects.create(sender=sender, receiver=receiver, text=message["text"])
-        # serializer = MessageSerializer(
-        #     sender=message["sender"], receiver=message["receiver"]
-        # )
-        # serializer.save()
 
     @database_sync_to_async
     def __change_status(self, status):

@@ -4,8 +4,7 @@
       (click)="setSelectedUser(user)">
       <div class="media active">
         <div *ngIf="user.online" class="user-status"></div>
-        <img class="align-self-center rounded-circle"
-          src={{user.photo}} alt="User Image">
+        <img class="align-self-center rounded-circle" src={{user.photo}} alt="User Image">
         <div class="media-body">
           <h5>{{ user.first_name }} {{ user.last_name }} <span *ngIf="getUnreadMessage(user)"
               class="badge badge-primary ml-2">{{

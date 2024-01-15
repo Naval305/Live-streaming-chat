@@ -47,9 +47,10 @@ export class MessageService {
     this.groupChatSubjects[group_id] = groupChatSubject;
   }
 
-  public getMessages(page: number, user: any): Observable<any> {
-    return this.http.get(
-      `${this.apiUrl}/api/chat/messages?user=${user}&logged_user=${localStorage.getItem("user")}&page=${page}`
-    );
+  public getMessages(url: any): Observable<any> {
+    const headers = this.authService.getHeaders();
+    return this.http.get(url, {
+      headers: headers,
+    });
   }
 }

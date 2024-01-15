@@ -1,0 +1,37 @@
+<div style="height: 100vh" class="d-flex justify-content-center align-items-center">
+    <div class="text-center align-self-center" *ngIf="callingStatus === 'calling'">
+      <div class="center">
+        <div class="pulse">
+          <img height="250" [src]="userData.photo" class="rounded-circle" alt="">
+        </div>
+      </div>
+  
+      <h1 class="mt-5 text-black-50 mb-5">Incoming call from <strong>{{ userData.sender }}</strong></h1>
+      <button type="button" (click)="answerCall()" class="btn btn-lg btn-success rounded-pill px-5 me-3">
+        <i class="fa-solid fa-phone"></i> Answer
+      </button>
+      <button type="button" (click)="rejectCall()" class="btn btn-lg btn-danger rounded-pill px-5">
+        <i class="fa-solid fa-phone" style="transform: rotate(133deg)"></i> Reject
+      </button>
+    </div>
+  
+    <div>
+      <video id="local_video" autoplay="autoplay" #local_video playsinline></video>
+      <video id="remote_video" autoplay #remote_video playsinline></video>
+  
+      <div class="call-controls text-center align-self-center p-3 bg-primary bg-opacity-10"
+        *ngIf="callingStatus === 'connected'">
+        <button class="btn btn-lg btn-secondary rounded-circle mx-1" (clickCallback)="toggleLocalAudio()"><i
+            [class]="micIcon"></i></button>
+        <button class="btn btn-lg btn-primary rounded-circle mx-1" (clickCallback)="toggleLocalVideo()"><i
+            [class]="videoIcon"></i></button>
+        <button (click)="rejectCall()" class="btn btn-lg btn-danger rounded-circle mx-1">
+          <i class="fa-solid fa-phone" style="transform: rotate(133deg)"></i>
+        </button>
+      </div>
+    </div>
+  
+    <div *ngIf="callingStatus === 'rejected'">
+      <h1>Call Rejected, closing the window</h1>
+    </div>
+  </div>
