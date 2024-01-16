@@ -68,7 +68,9 @@ export class UserStoreService {
   }
 
   getGroups() {
-    return this.http.get(`${this.apiUrl}/api/chat/group-message`);
+    return this.http
+      .get(`${this.apiUrl}/api/chat/group-message`)
+      .subscribe((res: any) => this.groupsSubject.next(res));
   }
 
   get users(): any[] {

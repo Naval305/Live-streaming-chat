@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MessageService } from 'src/app/services/message.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
 
 @Component({
@@ -14,8 +15,9 @@ export class AddGroupComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public userData: any,
-
-    private userStoreService: UserStoreService
+    private dialogRef: MatDialogRef<AddGroupComponent>,
+    private userStoreService: UserStoreService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -26,5 +28,12 @@ export class AddGroupComponent implements OnInit {
     });
   }
 
-  submitForm() {}
+  submitForm() {
+    var users = this.selectedUser.map((email: any) => ({ email }));
+    this.messageService
+      .addGroup(users, this.groupName)
+      .subscribe((response) => {
+        this.dialogRef.close();
+      });
+  }
 }

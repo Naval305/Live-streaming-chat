@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddGroupComponent } from '../add-group/add-group.component';
+import { UserStoreService } from 'src/app/services/user-store.service';
 
 @Component({
   selector: 'app-header',
@@ -9,12 +10,14 @@ import { AddGroupComponent } from '../add-group/add-group.component';
 })
 export class HeaderComponent implements OnInit {
   activeUserName: string = '';
-  constructor(private dialog: MatDialog) {}
+  constructor(
+    private dialog: MatDialog,
+    private userService: UserStoreService
+  ) {}
 
   ngOnInit(): void {}
 
-  logout() {
-  }
+  logout() {}
 
   addGroup() {
     const dialogRef = this.dialog.open(AddGroupComponent, {
@@ -23,6 +26,8 @@ export class HeaderComponent implements OnInit {
       disableClose: false,
     });
 
-    dialogRef.afterClosed().subscribe((result: any) => {});
+    dialogRef.afterClosed().subscribe((result: any) => {
+      this.userService.getGroups();
+    });
   }
 }

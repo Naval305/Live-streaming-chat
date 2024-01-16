@@ -53,4 +53,15 @@ export class MessageService {
       headers: headers,
     });
   }
+
+  addGroup(users: any, name: any) {
+    const headers = this.authService.getHeaders();
+    return this.http.post(
+      `${this.apiUrl}/api/chat/create-group`,
+      { members: users, name: name },
+      {
+        headers: headers,
+      }
+    );
+  }
 }

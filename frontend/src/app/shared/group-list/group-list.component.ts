@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'src/app/services/message.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
 
@@ -17,12 +17,14 @@ export class GroupListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.userStoreService.getGroups().subscribe((response: any) => {
-      this.groups = response['results'];
-      this.userStoreService.groups = this.groups;
-      this.groups.map((obj: any) => {
-        this.messageService.connectGroupChatSocket(obj.id);
-      });
+    this.userStoreService.getGroups();
+    this.userStoreService.groups$.subscribe((response: any) => {
+      if (response && response.length != 0) {
+        this.groups = response['results'];
+        this.groups.map((obj: any) => {
+          this.messageService.connectGroupChatSocket(obj.id);
+        });
+      }
     });
   }
 
