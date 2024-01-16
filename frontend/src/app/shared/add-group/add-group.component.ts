@@ -30,6 +30,7 @@ export class AddGroupComponent implements OnInit {
 
   submitForm() {
     var users = this.selectedUser.map((email: any) => ({ email }));
+    users.push({ email: localStorage.getItem('user') });
     this.messageService
       .addGroup(users, this.groupName)
       .subscribe((response) => {

@@ -87,6 +87,8 @@ export class SenderGroupComponent implements OnInit {
     this.remoteVideo.nativeElement.play();
   }
 
+  
+
   connectMedia(constraints: MediaStreamConstraints): void {
     this.localStream = new MediaStream();
 

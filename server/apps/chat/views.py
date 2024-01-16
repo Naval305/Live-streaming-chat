@@ -44,7 +44,11 @@ class GetMessages(ListAPIView):
 
 class GetGroupViewApi(ListAPIView):
     serializer_class = GroupSerializer
-    queryset = ChatGroup.objects.all()
+
+    def get_queryset(self):
+        return ChatGroup.objects.filter(members__email=self.request.user)
+        
+
 
 
 class CreateGroupViewApi(APIView):

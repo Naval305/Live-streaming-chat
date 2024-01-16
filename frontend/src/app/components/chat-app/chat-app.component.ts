@@ -73,15 +73,17 @@ export class ChatAppComponent implements OnInit {
             const user = this.users.find(
               (value) => value.email === message.sender
             );
-            user.messages.push(message);
-            if (this.selected_user.email === user.email) {
-              user.messages.forEach(
-                (value: { read: boolean }) => (value.read = true)
-              );
+            if (user) {
+              user.messages.push(message);
+              if (this.selected_user.email === user.email) {
+                user.messages.forEach(
+                  (value: { read: boolean }) => (value.read = true)
+                );
+              }
+              const index = this.users.indexOf(user);
+              this.users.splice(index, 1);
+              this.users.unshift(user);
             }
-            const index = this.users.indexOf(user);
-            this.users.splice(index, 1);
-            this.users.unshift(user);
           }
         };
       }

@@ -51,7 +51,7 @@ export class GroupMssgWindowComponent implements OnInit, AfterViewChecked {
             }
           } else {
             const message = eventJSON.message;
-            const groups = this.groups.find(
+            const groups = this.groups["results"].find(
               (value: { id: any }) => value.id == message.sender_group
             );
 

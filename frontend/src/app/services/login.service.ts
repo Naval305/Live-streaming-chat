@@ -24,6 +24,10 @@ export class LoginService {
     });
   }
 
+  public logout(user: any) {
+    
+  }
+
   isAuthenticated(): boolean {
     const token = localStorage.getItem('token');
     return !!token;

@@ -1,5 +1,6 @@
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.generics import CreateAPIView, ListAPIView
+from rest_framework.views import APIView
 
 from apps.user.utils import notify_others
 from .models import User

@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { LoginService } from './login.service';
@@ -68,8 +68,11 @@ export class UserStoreService {
   }
 
   getGroups() {
+    const headers = this.authService.getHeaders();
     return this.http
-      .get(`${this.apiUrl}/api/chat/group-message`)
+      .get(`${this.apiUrl}/api/chat/group-message`, {
+        headers: headers,
+      })
       .subscribe((res: any) => this.groupsSubject.next(res));
   }
 

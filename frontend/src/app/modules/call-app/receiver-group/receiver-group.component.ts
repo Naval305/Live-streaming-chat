@@ -42,7 +42,6 @@ export class ReceiverGroupComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.userData = JSON.parse(this.route.snapshot['queryParams']['display']);
-    console.log(this.userData)
     this.initializePeer();
   }
 
@@ -68,7 +67,6 @@ export class ReceiverGroupComponent implements OnInit, OnDestroy {
   }
 
   receiveData(conn: any): void {
-    alert('sdagfsad');
     conn.on('data', (data: any) => {});
   }
 
