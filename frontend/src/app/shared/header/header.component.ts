@@ -10,14 +10,17 @@ import { Router } from '@angular/router';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  activeUserName: string = '';
+  currentUser: any;
   constructor(
     private dialog: MatDialog,
     private userService: UserStoreService,
     private router: Router
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.currentUser = localStorage.getItem("user");
+    this.currentUser = this.currentUser.split('@')[0];
+  }
 
   logout() {
     localStorage.removeItem('token');

@@ -7,7 +7,7 @@
             <div *ngIf="selected_user.online" class="user-status"></div>
             <img [src]="selected_user.photo" alt="">
             <div class="media-body">
-              <h5>{{ selected_user.first_name }}</h5>
+              <h5>{{ selected_user.first_name }} {{ selected_user.last_name }}</h5>
               <p class="mb-0">{{ selected_user.online ? 'Online' : 'Offline' }}</p>
             </div>
           </li>
@@ -15,11 +15,11 @@
       </div>
       <div class="col-6">
         <ul class="list-inline float-end mb-0">
-          <li class="list-inline-item">
+          <!-- <li class="list-inline-item">
             <button (click)="makeCall('audio')" type="button" class="">
               <img src="assets/icons/phone.svg" alt="">
             </button>
-          </li>
+          </li> -->
 
           <li class="list-inline-item">
             <button (click)="makeCall('video')" type="button" class="">
