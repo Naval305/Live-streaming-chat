@@ -20,7 +20,7 @@ export class SenderGroupComponent implements OnInit {
   call: any;
   localStream: any = null;
   callingStatus = 'calling';
-  wsUrl: any = 'ws://127.0.0.1:8000';
+  wsUrl: any = 'wss://localhost:8001';
   getUserMedia = new MediaStream();
   userData: any;
 

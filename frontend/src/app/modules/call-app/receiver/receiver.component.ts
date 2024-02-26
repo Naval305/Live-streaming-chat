@@ -27,7 +27,7 @@ export class ReceiverComponent implements OnInit, OnDestroy {
   call: any;
   localStream: any = null;
   remotePeerId: string = '';
-  wsUrl: any = 'ws://127.0.0.1:8000';
+  wsUrl: any = 'wss://localhost:8001';
   callingStatus = 'calling';
   micStashed = false;
   micIcon = 'fa-solid fa-microphone';
@@ -72,6 +72,8 @@ export class ReceiverComponent implements OnInit, OnDestroy {
   }
 
   answerCall(): void {
+    console.log(navigator)
+    console.log(navigator.mediaDevices)
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
       .then((stream: MediaStream) => {

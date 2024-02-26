@@ -5,8 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class CallService {
-  private apiUrl = 'http://127.0.0.1:8000';
-  private wsUrl: any = 'ws://127.0.0.1:8000';
+  private apiUrl = 'https://10.6.50.104:8000';
   // public callSocket: any;
 
   constructor(private http: HttpClient) {}

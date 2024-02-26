@@ -20,7 +20,7 @@ export class MessageWindowComponent implements OnInit, AfterViewChecked {
   @Input() selected_user!: any;
   @ViewChild('chatBody') chatBody!: ElementRef;
 
-  private apiUrl = 'http://localhost:8000';
+  private apiUrl = 'https://10.6.50.104:8000';
   users: any[] = [];
   message: string = '';
   typing: boolean = false;

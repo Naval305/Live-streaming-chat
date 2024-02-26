@@ -7,8 +7,8 @@ import { Observable, Subject } from 'rxjs';
   providedIn: 'root',
 })
 export class MessageService {
-  private apiUrl = 'http://localhost:8000';
-  private wsUrl: any = 'ws://127.0.0.1:8000';
+  private apiUrl = 'https://10.6.50.104:8000';
+  private wsUrl: any = 'wss://10.6.50.104:8001';
   public messageSocket = this.connectMessageSocket();
   public notificationSocket = this.connectNotificationSocket();
   public groupChatSocket: { [key: string]: WebSocket } = {};
@@ -19,8 +19,8 @@ export class MessageService {
 
   connectMessageSocket() {
     var activeEmail = localStorage.getItem('user') ?? '';
+    console.log(window.location.protocol);
     var call = localStorage.getItem('call') ?? '';
-
     return new WebSocket(
       `${this.wsUrl}/ws/message/${encodeURIComponent(activeEmail)}?call=${call}`
     );

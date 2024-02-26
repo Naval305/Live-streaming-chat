@@ -7,7 +7,7 @@ import { LoginService } from './login.service';
   providedIn: 'root',
 })
 export class UserStoreService {
-  private apiUrl = 'http://localhost:8000';
+  private apiUrl = 'https://10.6.50.104:8000';
 
   private usersSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([
     {
